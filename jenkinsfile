@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('CHECKOUT GIT') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Mohan_GitHub', url: 'https://github.com/mohan-m21/database-engine.git']])
+            }
+        }
+        stage('VALIDATE') {
+            steps {
+                sh 'mvn validate'
+            }
+        }
+        stage('COMPILE') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('Testing') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Artifact') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+}
